@@ -5,7 +5,7 @@ msg_err2: .asciz "Read failure: must contain one space\n"
 msg_err3: .asciz "Read failure: buffer overflow\n"
 fmt_str: .asciz "%s\n"
 fmt_num: .asciz "%d\n"
-debug_str: .asciz "|%d %d|\n"
+debug_str: .asciz "|%s|\n"
 buffer: .space BUF_LEN
 .text
 .global main
@@ -45,8 +45,10 @@ exit:
     call atoi
     mv s2, a0
     la a0, debug_str
-    mv a1, s3
-    mv a2, s2
+    li a1, 0
+    addi s1, s1, -1
+    sb a1, (s1)
+    la a1, buffer
     call printf
     add s3, s3, s2
     mv a1, s3
