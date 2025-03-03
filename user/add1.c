@@ -9,7 +9,11 @@ int main(int argc, char *argv[]) {
     char *cur;
     for (i = 0; i + 1 < BUF_LEN; ++i) {
         cc = read(0, &c, 1);
-        if (cc < 1) break;
+        if (cc == 0) break;
+        if (cc < 0) {
+            write(2, "Read failure\n", 14);
+            exit(1);
+        }
         buf[i] = c;
         if (c == '\n') break;
         if (!('0' <= c && c <= '9') && c != ' ') {

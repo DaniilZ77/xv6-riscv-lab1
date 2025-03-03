@@ -3,6 +3,7 @@
 msg_err1: .asciz "Read failure: must contain digits\n"
 msg_err2: .asciz "Read failure: must contain one space\n"
 msg_err3: .asciz "Read failure: buffer overflow\n"
+msg_err4: .asciz "Read failure\n"
 fmt_str: .asciz "%s\n"
 fmt_num: .asciz "%d\n"
 debug_str: .asciz "|%s|\n"
@@ -25,6 +26,7 @@ main:
 read:
     lbu s0, (s1)
     beqz s0, exit
+    blt s0, zero, err4
     addi s1, s1, 1
     bne s0, s2, a
     mv t6, s1
@@ -58,17 +60,19 @@ exit:
     li a0, 0
     ecall
 err1:
-    la a0, msg_err1
-    call printf
+    la a1, msg_err1
     j err_exit
 err2:
-    la a0, msg_err2
-    call printf
+    la a1, msg_err2
     j err_exit
 err3:
-    la a0, msg_err3
-    call printf
+    la a1, msg_err3
+    j err_exit
+err4:
+    la a1, msg_err4
 err_exit:
+    li a0, 2
+    call fprintf
     li a7, 2
     li a0, 1
     ecall
