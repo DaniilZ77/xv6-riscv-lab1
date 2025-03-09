@@ -1,3 +1,5 @@
+#include "procinfo.h"
+
 struct stat;
 
 // system calls
@@ -23,6 +25,7 @@ char* sbrk(int);
 int sleep(int);
 int uptime(void);
 int add(int n1, int n2);
+int ps_listinfo(struct procinfo *plist, int lim);
 
 // ulib.c
 int stat(const char*, struct stat*);
