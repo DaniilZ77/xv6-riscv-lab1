@@ -8,20 +8,21 @@ int main(int argc, char *argv[]) {
         fprintf(2, "fork error\n");
         exit(1);
     } else if (pid > 0) {
-        printf("parent pid = %d, child pid = %d\n", getpid(), pid);
-
+        sleep(20);
         if (kill(pid) < 0) {
             fprintf(2, "kill error\n");
             exit(1);
         }
 
-        int cpid, status;
-        cpid = wait(&status);
-
-        printf("child pid = %d exit with status = %d\n", cpid, status);
+        int status;
+        wait(&status);
+        printf("pid = %d exit with status = %d after kill\n", pid, status);
         exit(0);
-    } else if (pid == 0) {
-        sleep(100);
+    } else {
+        char *args[] = {"task1a", 0};
+        exec("/task1a", args);
+
+        fprintf(2, "exec error\n");
         exit(1);
     }
-}
+} 
