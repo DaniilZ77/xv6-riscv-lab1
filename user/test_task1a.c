@@ -15,7 +15,10 @@ int main(int argc, char *argv[]) {
         }
 
         int status;
-        wait(&status);
+        if (wait(&status) < 0) {
+            fprintf(2, "wait error\n");
+            exit(1);
+        }
         printf("pid = %d exit with status = %d after kill\n", pid, status);
         exit(0);
     } else {
