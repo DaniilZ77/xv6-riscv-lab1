@@ -18,8 +18,19 @@ uint64 sys_ps_listinfo(void) {
     argint(1, &lim);
 
     struct proc *p;
-    struct procinfo pitem;
     int pcount = 0;
+    if (plist == 0) {
+        for (p = proc; p < &proc[NPROC]; p++) {
+            acquire(&p->lock);
+            if (p->state != UNUSED) {
+                ++pcount;
+            }
+            release(&p->lock);
+        }
+        return pcount; 
+    }
+
+    struct procinfo pitem;
     for (p = proc; p < &proc[NPROC]; p++) {
         acquire(&p->lock);
         if (p->state != UNUSED) {
@@ -54,14 +65,12 @@ uint64 sys_ps_listinfo(void) {
             }
             release(&wait_lock);
 
-            if (plist != 0) {
-                if (copyout(myproc()->pagetable, plist, (char*)&pitem, sizeof(struct procinfo)) < 0) {
-                    release(&p->lock);
-                    return -2;
-                }
-    
-                plist += sizeof(struct procinfo);
+            if (copyout(myproc()->pagetable, plist, (char*)&pitem, sizeof(struct procinfo)) < 0) {
+                release(&p->lock);
+                return -2;
             }
+
+            plist += sizeof(struct procinfo);
         }
         release(&p->lock);
     }

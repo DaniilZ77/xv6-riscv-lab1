@@ -18,6 +18,6 @@ int main(int argc, char *argv[]) {
     ret = ps_listinfo(0, 32);
     printf(ret == 3 ? "Test4(success): passed\n" : "Test4(success): failed\n");
 
-    ret = ps_listinfo(0, 1);
-    printf(ret == -1 ? "Test5(insufficient lim): passed\n" : "Test5(insufficient lim): failed\n");
+    ret = ps_listinfo(0, 0);
+    printf(ret == 3 ? "Test5(success): passed\n" : "Test5(success): failed\n");
 }
