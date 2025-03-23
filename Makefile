@@ -22,6 +22,7 @@ OBJS = \
   $K/fs.o \
   $K/log.o \
   $K/sleeplock.o \
+  $K/mutex.o \
   $K/file.o \
   $K/pipe.o \
   $K/exec.o \
@@ -29,7 +30,7 @@ OBJS = \
   $K/kernelvec.o \
   $K/plic.o \
   $K/virtio_disk.o \
-  $K/sysadd.o
+  $K/sysmutex.o
 
 # riscv64-unknown-elf- or riscv64-linux-gnu-
 # perhaps in /opt/riscv/bin
@@ -140,9 +141,7 @@ UPROGS=\
 	$U/_grind\
 	$U/_wc\
 	$U/_zombie\
-	$U/_add1\
-	$U/_add2\
-	$U/_add3\
+	$U/_mutex_test
 
 fs.img: mkfs/mkfs README $(UPROGS)
 	mkfs/mkfs fs.img README $(UPROGS)

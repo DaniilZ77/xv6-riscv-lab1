@@ -23,6 +23,9 @@ char* sbrk(int);
 int sleep(int);
 int uptime(void);
 int add(int n1, int n2);
+int mutex(int* fd);
+int mutex_lock(int fd);
+int mutex_unlock(int fd);
 
 // ulib.c
 int stat(const char*, struct stat*);
