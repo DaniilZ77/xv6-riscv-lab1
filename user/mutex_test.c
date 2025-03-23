@@ -16,26 +16,25 @@ int main(int argc, char *argv[]) {
             printf("fork failed\n");
             exit(1);
         } else if (pid == 0) {
-            sleep(1);
-            mutex_lock(fd);
             for (int i = 0; i < 10; i++) {
+                mutex_lock(fd);
                 printf("child of child iteration: %d\n", i);
+                mutex_unlock(fd);
             }
-            mutex_unlock(fd);
         } else {
-            mutex_lock(fd);
             for (int i = 0; i < 10; i++) {
+                mutex_lock(fd);
                 printf("child iteration: %d\n", i);
+                mutex_unlock(fd);
             }
-            mutex_unlock(fd);
+            wait(&status);
         }
     } else {
-        sleep(2);
-        mutex_lock(fd);
         for (int i = 0; i < 10; i++) {
+            mutex_lock(fd);
             printf("parent iteration: %d\n", i);
+            mutex_unlock(fd);
         }
-        mutex_unlock(fd);
-        sleep(50);
+        wait(&status);
     }
 }
