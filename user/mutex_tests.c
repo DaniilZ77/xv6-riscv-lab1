@@ -27,6 +27,7 @@ int main(int argc, char* argv[]) {
         exit(1);
     } else if (pid == 0) {
         mutex_lock(fd);
+        sleep(2);
     } else {
         sleep(2);
         printf(mutex_unlock(fd) == -1 ? "Test 4 (unlock mutex from another process): passed\n" : "Test 4 (unlock mutex from another process): failed\n");
