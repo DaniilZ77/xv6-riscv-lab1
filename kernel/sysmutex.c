@@ -40,9 +40,10 @@ uint64 sys_mutex_lock(void) {
     int pid;
     struct proc *pr = myproc();
     acquire(&pr->lock);
-    f = pr->ofile[fd];
     pid = pr->pid;
     release(&pr->lock);
+
+    f = pr->ofile[fd];
 
     acquiresleep(&f->mutex->mu);
     acquire(&f->mutex->lock);
@@ -58,8 +59,8 @@ uint64 sys_mutex_unlock(void) {
     struct file *f;
     int pid;
     struct proc *pr = myproc();
-    acquire(&pr->lock);
     f = pr->ofile[fd];
+    acquire(&pr->lock);
     pid = pr->pid;
     release(&pr->lock);
     return mutexunlock(f, pid);
