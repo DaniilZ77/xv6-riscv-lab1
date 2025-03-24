@@ -72,7 +72,7 @@ fileclose(struct file *f)
       acquire(&pr->lock);
       pid = pr->pid;
       release(&pr->lock);
-      mutex_unlock(f, pid);
+      mutexunlock(f, pid);
     }
     release(&ftable.lock);
     return;

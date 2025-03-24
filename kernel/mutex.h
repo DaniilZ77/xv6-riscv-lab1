@@ -6,4 +6,4 @@ struct mutex {
 
 void mutexclose(struct mutex *mutex);
 int mutexalloc(struct file **f);
-int mutex_unlock(struct file *f, int pid);
+int mutexunlock(struct file *f, int pid);

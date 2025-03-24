@@ -9,7 +9,7 @@
 #include "file.h"
 #include "mutex.h"
 
-int mutex_unlock(struct file *f, int pid) {
+int mutexunlock(struct file *f, int pid) {
     acquire(&f->mutex->lock);
     if (f->mutex->owner != pid) {
         release(&f->mutex->lock);

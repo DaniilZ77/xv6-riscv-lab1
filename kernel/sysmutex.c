@@ -62,5 +62,5 @@ uint64 sys_mutex_unlock(void) {
     f = pr->ofile[fd];
     pid = pr->pid;
     release(&pr->lock);
-    return mutex_unlock(f, pid);
+    return mutexunlock(f, pid);
 }
