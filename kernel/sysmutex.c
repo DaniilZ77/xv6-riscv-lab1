@@ -33,17 +33,26 @@ uint64 sys_mutex(void) {
   return 0;
 }
 
+int check_fd(int fd, struct proc *pr) {
+  if(fd < 0 || fd >= NOFILE || pr->ofile[fd] == 0) {
+    return -1;
+  }
+  return 0;
+}
+
 uint64 sys_mutex_lock(void) {
     int fd;
     argint(0, &fd);
     struct file *f;
     int pid;
     struct proc *pr = myproc();
+    if (check_fd(fd, pr) < 0) {
+        return -1;
+    }
+    f = pr->ofile[fd];
     acquire(&pr->lock);
     pid = pr->pid;
     release(&pr->lock);
-
-    f = pr->ofile[fd];
 
     acquiresleep(&f->mutex->mu);
     acquire(&f->mutex->lock);
@@ -59,6 +68,9 @@ uint64 sys_mutex_unlock(void) {
     struct file *f;
     int pid;
     struct proc *pr = myproc();
+    if (check_fd(fd, pr) < 0) {
+      return -1;
+    }
     f = pr->ofile[fd];
     acquire(&pr->lock);
     pid = pr->pid;
