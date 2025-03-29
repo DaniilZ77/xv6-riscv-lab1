@@ -33,9 +33,6 @@ int main(int argc, char *argv[]) {
         printf("name: %s\n", plist[i].name);
         printf("state: ");
         switch (plist[i].state) {
-        case procinfostate_used:
-            printf("used");
-            break;
         case procinfostate_runnable:
             printf("runnable");
             break;

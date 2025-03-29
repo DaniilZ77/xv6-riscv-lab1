@@ -2,7 +2,6 @@
 #define PROCINFO_H
 
 enum procinfostate { 
-    procinfostate_used,
     procinfostate_sleeping,
     procinfostate_runnable,
     procinfostate_running,

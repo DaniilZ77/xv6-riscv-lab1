@@ -22,7 +22,7 @@ uint64 sys_ps_listinfo(void) {
     if (plist == 0) {
         for (p = proc; p < &proc[NPROC]; p++) {
             acquire(&p->lock);
-            if (p->state != UNUSED) {
+            if (p->state != UNUSED && p->state != USED) {
                 ++pcount;
             }
             release(&p->lock);
@@ -33,7 +33,7 @@ uint64 sys_ps_listinfo(void) {
     struct procinfo pitem;
     for (p = proc; p < &proc[NPROC]; p++) {
         acquire(&p->lock);
-        if (p->state != UNUSED) {
+        if (p->state != UNUSED && p->state != USED) {
             if (++pcount > lim) {
                 release(&p->lock);
                 return -1;
@@ -42,9 +42,6 @@ uint64 sys_ps_listinfo(void) {
             pitem.pid = p->pid;
             safestrcpy(pitem.name, p->name, sizeof(pitem.name));
             switch(p->state) {
-            case USED:
-                pitem.state = procinfostate_used;
-                break;
             case SLEEPING:
                 pitem.state = procinfostate_sleeping;
                 break;
@@ -61,7 +58,9 @@ uint64 sys_ps_listinfo(void) {
             acquire(&wait_lock);
             pitem.parent_pid = -1;
             if (p->parent) {
+                acquire(&p->parent->lock);
                 pitem.parent_pid = p->parent->pid;
+                release(&p->parent->lock);
             }
             release(&wait_lock);
 
