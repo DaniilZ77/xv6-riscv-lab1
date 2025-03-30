@@ -29,8 +29,7 @@ OBJS = \
   $K/kernelvec.o \
   $K/plic.o \
   $K/virtio_disk.o \
-  $K/sysadd.o \
-  $K/sysps_listinfo.o
+  $K/sysproc_pagetables.o
 
 # riscv64-unknown-elf- or riscv64-linux-gnu-
 # perhaps in /opt/riscv/bin
@@ -142,11 +141,7 @@ UPROGS=\
 	$U/_grind\
 	$U/_wc\
 	$U/_zombie\
-	$U/_add1\
-	$U/_add2\
-	$U/_add3\
-	$U/_ps\
-	$U/_ps_test\
+	$U/_proc_pt_test
 
 fs.img: mkfs/mkfs README $(UPROGS)
 	mkfs/mkfs fs.img README $(UPROGS)

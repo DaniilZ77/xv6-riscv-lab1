@@ -36,5 +36,4 @@ entry("getpid");
 entry("sbrk");
 entry("sleep");
 entry("uptime");
-entry("add");
-entry("ps_listinfo");
+entry("proc_pagetables");
