@@ -22,8 +22,6 @@ int mutexunlock(struct file *f, int pid) {
 }
 
 int mutexalloc(struct file **f) {
-    printf("DEBUG: mutexalloc\n"); // debug print
-
     *f = 0;
     struct mutex* mutex = 0;
     if((*f = filealloc()) == 0)
@@ -39,6 +37,9 @@ int mutexalloc(struct file **f) {
     (*f)->readable = (*f)->writable = 0;
     (*f)->pipe = 0;
     (*f)->mutex = mutex;
+
+    printf("DEBUG: mutexalloc (%p)\n", mutex); // debug print
+
     return 0;
 
 bad:
@@ -50,7 +51,7 @@ bad:
 }
 
 void mutexclose(struct mutex *mutex) {
-    printf("DEBUG: mutexclose\n"); // debug print
+    printf("DEBUG: mutexclose (%p)\n", mutex); // debug print
 
     kfree((char*)mutex);
 }

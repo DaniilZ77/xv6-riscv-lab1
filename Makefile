@@ -142,7 +142,8 @@ UPROGS=\
 	$U/_wc\
 	$U/_zombie\
 	$U/_mutex_test\
-	$U/_mutex_tests
+	$U/_mutex_tests\
+	$U/_mutex_no_lock\
 
 fs.img: mkfs/mkfs README $(UPROGS)
 	mkfs/mkfs fs.img README $(UPROGS)
