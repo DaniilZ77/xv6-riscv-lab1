@@ -22,6 +22,9 @@ void            consoleinit(void);
 void            consoleintr(int);
 void            consputc(int);
 
+// pseudo.c
+void pseudoinit(void);
+
 // exec.c
 int             exec(char*, char**);
 

@@ -1,0 +1,4 @@
+#define MINOR_NULL 0
+#define MINOR_ZERO 1
+#define MINOR_URANDOM 2
+#define MINOR_NULLSTAT 3
