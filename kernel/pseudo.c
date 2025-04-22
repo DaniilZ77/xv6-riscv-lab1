@@ -12,7 +12,10 @@
 #include "proc.h"
 #include "pseudo.h"
 
-static uint64 seed;
+struct {
+    struct spinlock lock;
+    uint64 seed;
+} urandom;
 
 struct {
     struct spinlock lock;
@@ -32,8 +35,11 @@ int pseudoread(short minor, int user_dst, uint64 dst, int n) {
         return n;
     case MINOR_URANDOM:
         for (int i = 0; i < n; i++) {
-            seed = seed * 3107121499 + 46061;
-            char rand = seed & 0xFF;
+            uint64 rand;
+            acquire(&urandom.lock);
+            urandom.seed = urandom.seed * 3107121499 + 46061;
+            rand = urandom.seed & 0xFF;
+            release(&urandom.lock);
             if (either_copyout(user_dst, dst + i, &rand, 1) == -1)
                 return -1;
         }
@@ -65,8 +71,12 @@ int pseudowrite(short minor, int user_src, uint64 src, int n) {
     case MINOR_URANDOM:
         if (n != sizeof(uint64))
             return -1;
+        uint64 seed;
         if (either_copyin(&seed, user_src, src, n) == -1)
             return -1;
+        acquire(&urandom.lock);
+        urandom.seed = seed;
+        release(&urandom.lock);
         return n;
     case MINOR_NULLSTAT:
         acquire(&nullstat.lock);
@@ -80,6 +90,7 @@ int pseudowrite(short minor, int user_src, uint64 src, int n) {
 
 void pseudoinit(void) {
     initlock(&nullstat.lock, "nullstat");
+    initlock(&urandom.lock,  "urandom");
     devsw[PSEUDO].read = pseudoread;
     devsw[PSEUDO].write = pseudowrite;
 }
