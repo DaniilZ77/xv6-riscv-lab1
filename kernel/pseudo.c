@@ -12,6 +12,8 @@
 #include "proc.h"
 #include "pseudo.h"
 
+#define BUFFER_SIZE 256
+
 struct {
     struct spinlock lock;
     uint64 seed;
@@ -27,9 +29,15 @@ int pseudoread(short minor, int user_dst, uint64 dst, int n) {
     case MINOR_NULL:
         return 0;
     case MINOR_ZERO:
-        char zero = 0;
-        for (int i = 0; i < n; i++) {
-            if (either_copyout(user_dst, dst + i, &zero, 1) == -1)
+        char zeros[BUFFER_SIZE];
+        memset(zeros, 0, BUFFER_SIZE);
+        for (int i = 0; i < n; i += BUFFER_SIZE) {
+            if (i + BUFFER_SIZE >= n) {
+                if (either_copyout(user_dst, dst + i, zeros, n - i) == -1)
+                    return -1;
+                break;
+            }
+            if (either_copyout(user_dst, dst + i, zeros, BUFFER_SIZE) == -1)
                 return -1;
         }
         return n;
