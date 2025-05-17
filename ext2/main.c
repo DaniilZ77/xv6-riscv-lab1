@@ -158,9 +158,8 @@ int main(int argc, char **argv) {
     }
     uint64_t file_size = ((uint64_t)read4bytes(inode_buf + 0x6C, need_swap) << 32) | read4bytes(inode_buf + 4, need_swap);
     uint32_t blocks[15];
-    for (int i = 0; i < 15; i++) {
+    for (int i = 0; i < 15; i++)
         blocks[i] = read4bytes(inode_buf + 0x28 + i * 4, need_swap);
-    }
     for (int i = 0; i < 12 && file_size; i++)
         out_blocks(img, blocks[i], 0, bs, need_swap, &file_size);
     if (file_size)
