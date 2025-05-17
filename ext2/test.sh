@@ -28,8 +28,8 @@ sudo mount -t ext2 "$LOOP" "$MNT"
 
 echo "4) files for testing"
 echo "Hello World" | sudo tee "$MNT/hello.txt" >/dev/null
-sudo dd if=/dev/urandom of="$MNT/big.bin"    bs=1M count=70  status=none
-sudo dd if=/dev/zero    of="$MNT/sparse.bin" seek=150 count=0 bs=1M status=none
+sudo dd if=/dev/urandom of="$MNT/big.bin" bs=1M count=70 status=none
+sudo dd if=/dev/zero of="$MNT/sparse.bin" seek=150 count=0 bs=1M status=none
 
 echo "5) get inode and calc sha"
 declare -A SHA INODE
@@ -43,7 +43,7 @@ echo "6) unmount"
 sudo umount "$MNT"
 sudo losetup -d "$LOOP"
 unset LOOP
-echo "   done."
+echo "done."
 
 echo "7) checking sha"
 RET=0
